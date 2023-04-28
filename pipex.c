@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 11:17:53 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/02/18 20:44:27 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/04/28 19:20:47 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ int ft_child_process(char **argv, char **env, int *fd)
 
     i = 0;
     
-    file = open(argv[1], O_RDONLY, 0777);
+    file = open(argv[1], O_RDONLY, 0666);
     if (file == -1)
     {
-        printf("error = %s\n", strerror(errno));
+        printf("error4 = %s\n", strerror(errno));
+		ft_putstr_fd("pipex: input: No such file or directory\n", 2);
         exit(1);
     }
     
@@ -52,7 +53,7 @@ int ft_child_process(char **argv, char **env, int *fd)
         {
             if (execve(path, command, env) == -1)
             {
-                printf("error = %s\n", strerror(errno));
+                printf("error5 = %s\n", strerror(errno));
                 exit(1);
             }
         }
@@ -73,12 +74,15 @@ int ft_child_process(char **argv, char **env, int *fd)
         {
             if (execve(path, command, env) == -1)
             {
-                printf("error = %s\n", strerror(errno));
+                printf("error6 = %s\n", strerror(errno));
                 exit(1);
             }
         }
         i++;
     }
+ 	ft_putstr_fd("pipex: input: command not found\n", 2);
+   	//exit(1);
+
     //execvp("ping", ping);
     //execlp("ping", "ping", "-c", "5", "google.com", NULL);  //ends by itself
     return(0);
@@ -94,10 +98,10 @@ int ft_parent_process(char **argv, char **env, int *fd)
 
     i = 0;
 
-    file = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
+    file = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0666);
     if (file == -1)
     {
-        printf("error = %s\n", strerror(errno));
+        printf("error7 = %s\n", strerror(errno));
         exit(1);
     }
     dup2(fd[0], STDIN_FILENO);
@@ -118,13 +122,13 @@ int ft_parent_process(char **argv, char **env, int *fd)
         {
             if (execve(path, command, env) == -1)
             {
-                printf("error = %s\n", strerror(errno));
+                printf("error8 = %s\n", strerror(errno));
                 exit(1);
             }
         }
     }
-
-    while (ft_strnstr(env[i], "PATH", 4) == 0)
+		
+	while (ft_strnstr(env[i], "PATH", 4) == 0)
 		i++;
     paths = ft_split(env[i] + 5, ':');
 
@@ -138,13 +142,15 @@ int ft_parent_process(char **argv, char **env, int *fd)
         {
             if (execve(path, command, env) == -1)
             {
-                printf("error = %s\n", strerror(errno));
+                printf("error9 = %s\n", strerror(errno));
                 exit(1);
             }
         }
         i++;
     }
-        //execlp("grep", "grep", "round", NULL);  //ends by itself
+   ft_putstr_fd("pipexPAR: input: command not found\n", 2);
+   //exit(20);
+	//execlp("grep", "grep", "round", NULL);  //ends by itself
     return(0);
 }
 
@@ -165,17 +171,18 @@ int main(int argc, char **argv, char *env[])
         exit(1);
     }
     dup2(fileerr, STDERR_FILENO);
-    close(fileerr);*/
-       
+    close(fileerr);
+	*/
+
     if(pipe(fd) == -1)
     {
-        printf("error = %s\n", strerror(errno));
+        printf("error1 = %s\n", strerror(errno));
         exit(-1);
     }
     pid = fork();
     if (pid == -1)
     {
-        printf("error = %s\n", strerror(errno));
+        printf("error2 = %s\n", strerror(errno));
         exit(1);
     }
 
@@ -187,7 +194,7 @@ int main(int argc, char **argv, char *env[])
     {
         ft_parent_process(argv, env, fd);
     }
-        //close(fd[0]);
+		//close(fd[0]);
         //close(fd[1]); 
         waitpid(pid, NULL, 0);
     return (0);
