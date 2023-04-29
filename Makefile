@@ -6,7 +6,7 @@
 #    By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/12 13:12:49 by mmoramov          #+#    #+#              #
-#    Updated: 2023/04/26 18:56:36 by mmoramov         ###   ########.fr        #
+#    Updated: 2023/04/29 19:23:43 by mmoramov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = pipex
 HEADER = pipex.h
 C_FLAGS = -Wall -Wextra -Werror -MMD
 RM = rm -f
-SRC_LIBFT = libft/libft.a 
+SRC_LIBFT = libft/libft.a
 MAKE_LIBFT = make -C libft
 
 # Colors
@@ -28,7 +28,7 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 
-SRC_FILES = pipex
+SRC_FILES = pipex child_process parent_process
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)
@@ -36,7 +36,7 @@ DEP = $(SRC:.c=.d)
 
 all: make_libs $(NAME)
 
-make_libs: 
+make_libs:
 	@$(MAKE_LIBFT)
 
 -include ${DEP}
@@ -47,7 +47,7 @@ make_libs:
 $(NAME):: $(OBJ) ./$(SRC_LIBFT)
 	$(CC) $(C_FLAGS) $(^) -o $(NAME)
 	@echo "$(BLUE)Everything has been compilated.$(BLACK)"
-	
+
 $(NAME)::
 	@echo "$(BLUE)No actions needed.$(BLACK)"
 
@@ -61,5 +61,5 @@ fclean: clean
 	$(RM) $(NAME)
 	$(MAKE_LIBFT) fclean
 	@echo "$(MAGENTA)Everything has been cleaned.$(BLACK)"
-	
+
 re: fclean all
