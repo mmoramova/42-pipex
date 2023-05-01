@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 19:22:33 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/04/30 00:18:23 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/05/01 19:18:29 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,25 @@ int ft_parent_process(char **argv, char **env, int *fd)
     close(fd[1]);
     close(file);
 
-    command = ft_split(argv[3], ' ');
+    command = ft_split_w_quotes(argv[3], ' ');
+
+	int j;
+	j = 0;
+
+	//ft_putstr_fd(command[0], 2);
+	//ft_putstr_fd(command[1], 2);
+	//ft_putstr_fd("\n", 2);
+
+	while (command[j])
+	{
+		command[j] = ft_strtrim(command[j], "\"\'");
+		j++;
+	}
+
+	//ft_putstr_fd(command[0], 2);
+	//ft_putstr_fd(command[1], 2);
+	//ft_putstr_fd("\n", 2);
+
     //command = ft_split("wc -l", ' ');
 	if (ft_strchr(command[0], '/')) //&& ft_strnstr(argv[2],".sh",100))
     {
@@ -53,10 +71,10 @@ int ft_parent_process(char **argv, char **env, int *fd)
         }
     }
 
-    while (ft_strnstr(env[i], "PATH", 4) == 0)
+    while (env[i] && ft_strnstr(env[i], "PATH", 4) == 0)
 		i++;
-	if ((ft_strnstr(env[i], "PATH", 4) != 0))
-    	paths = ft_split(env[i] + 5, ':');
+	if (env[i])
+		paths = ft_split(env[i] + 5, ':');
 	else
 		paths = ft_split("/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin", ':');
 

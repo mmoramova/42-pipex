@@ -6,7 +6,7 @@
 #    By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/12 13:12:49 by mmoramov          #+#    #+#              #
-#    Updated: 2023/04/29 19:23:43 by mmoramov         ###   ########.fr        #
+#    Updated: 2023/05/01 18:06:07 by mmoramov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 
-SRC_FILES = pipex child_process parent_process
+SRC_FILES = pipex child_process parent_process ft_split_w_quotes
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

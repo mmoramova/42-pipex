@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 19:22:36 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/04/30 00:18:28 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/05/01 18:05:09 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 int ft_child_process(char **argv, char **env, int *fd)
 {
-    int     file;
-    char    **command;
-    int     i;
-    char    **paths;
-    char    *path;
+	int		file;
+	char	**command;
+	int		i;
+	char	**paths;
+	char	*path;
+	int		j;
 
-    i = 0;
+	j = 0;
+	i = 0;
 
 	//read file
     file = open(argv[1], O_RDONLY, 0666);
@@ -42,7 +44,14 @@ int ft_child_process(char **argv, char **env, int *fd)
     if (ft_strncmp(argv[2], "./script space.sh",ft_strlen("./script space.sh")) == 0)
        command = ft_split("wc -l", ' ');
     else
-        command = ft_split(argv[2], ' ');
+	{
+        command = ft_split_w_quotes(argv[2], ' ');
+		while (command[j])
+		{
+			command[j] = ft_strtrim(command[j], "\"\'");
+			j++;
+		}
+	}
 
 
 	//split all parts to the command
@@ -68,10 +77,10 @@ int ft_child_process(char **argv, char **env, int *fd)
         }
     }
 
-    while (ft_strnstr(env[i], "PATH", 4) == 0)
+	while (env[i] && ft_strnstr(env[i], "PATH", 4) == 0)
 		i++;
-	if ((ft_strnstr(env[i], "PATH", 4) != 0))
-    	paths = ft_split(env[i] + 5, ':');
+	if (env[i])
+		paths = ft_split(env[i] + 5, ':');
 	else
 		paths = ft_split("/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin", ':');
 
