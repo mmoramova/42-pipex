@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 19:22:36 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/04/29 20:32:07 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/04/30 00:18:28 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int ft_child_process(char **argv, char **env, int *fd)
     if (file == -1)
     {
         //printf("error4 = %s\n", strerror(errno));
-		//ft_putstr_fd("pipex: input: No such file or directory\n", 2);
+		ft_putstr_fd("pipex: input: No such file or directory\n", 2);
         exit(11);
     }
 
@@ -70,7 +70,10 @@ int ft_child_process(char **argv, char **env, int *fd)
 
     while (ft_strnstr(env[i], "PATH", 4) == 0)
 		i++;
-    paths = ft_split(env[i] + 5, ':');
+	if ((ft_strnstr(env[i], "PATH", 4) != 0))
+    	paths = ft_split(env[i] + 5, ':');
+	else
+		paths = ft_split("/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin", ':');
 
     i = 0;
 
@@ -92,7 +95,9 @@ int ft_child_process(char **argv, char **env, int *fd)
         }
         i++;
     }
- 	ft_putstr_fd("pipex: input: command not found\n", 2);
+	ft_putstr_fd("pipex: ", 2);
+	ft_putstr_fd(command[0], 2);
+ 	ft_putstr_fd(": command not found\n", 2);
    	exit(14);
 
     //execvp("ping", ping);
