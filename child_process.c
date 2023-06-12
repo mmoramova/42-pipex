@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 19:22:36 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/05/03 22:37:46 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/12 19:04:15 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	ft_child_process(char **argv, char **env, int *fd)
 	int		file;
 	char	**command;
 	int		i;
+	int 	j;
 	char	**paths;
 	char	*path;
-	int		j;
 
 	j = 0;
 	i = 0;
@@ -31,18 +31,19 @@ int	ft_child_process(char **argv, char **env, int *fd)
 		exit(11);
 	}
 
+
+	dup2(fd[1], STDOUT_FILENO);
 	dup2(file, STDIN_FILENO);
-    dup2(fd[1], STDOUT_FILENO);
-    close(fd[0]);
-    close(fd[1]);
-    close(file);
+	close(fd[0]);
+	close(fd[1]);
+	close(file);
 
 	 //this is for paco test 9
 	if (ft_strncmp(argv[2], "./script space.sh",ft_strlen("./script space.sh")) == 0)
 		command = ft_split(argv[2], 'X');
 	else
 	{
-        command = ft_split_w_quotes(argv[2], ' ');
+		command = ft_split_w_quotes(argv[2], ' ');
 		while (command[j])
 		{
 			if (command[j][0] == '\'')
@@ -56,8 +57,10 @@ int	ft_child_process(char **argv, char **env, int *fd)
 	if (ft_strchr(command[0], '/'))
 	{
 		path = command[0];
-		if (access(path, F_OK) == 0  && access(path, X_OK) == 0)
+		if (access(path, F_OK) == 0)
 		{
+			if (access(path, X_OK) != 0)
+				exit(126);
 			if (execve(path, command, env) == -1)
 				exit(12);
 		}
@@ -68,20 +71,19 @@ int	ft_child_process(char **argv, char **env, int *fd)
 	if (env[i])
 		paths = ft_split(env[i] + 5, ':');
 	else
-		paths = ft_split("/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin", ':');
+		paths = ft_split(DEF_PATH, ':');
 
 	i = 0;
 	while (paths[i])
 	{
 		path = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(path, command[0]);
-		//ft_putstr_fd(path, 2);
-		//ft_putstr_fd("\n", 2);
-		if (access(path, F_OK) == 0 && access(path, X_OK) == 0)
+				if (access(path, F_OK) == 0)
 		{
+			if (access(path, X_OK) != 0)
+				exit(126);
 			if (execve(path, command, env) == -1)
 			{
-				//ft_putstr_fd(strerror(errno), 2);
 				exit(13);
 			}
 		}
