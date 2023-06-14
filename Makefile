@@ -6,13 +6,13 @@
 #    By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/12 13:12:49 by mmoramov          #+#    #+#              #
-#    Updated: 2023/05/01 18:06:07 by mmoramov         ###   ########.fr        #
+#    Updated: 2023/06/14 21:41:04 by mmoramov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 HEADER = pipex.h
-C_FLAGS = -Wall -Wextra -Werror -MMD
+C_FLAGS = -Wall -Wextra -Werror -MMD -g3
 RM = rm -f
 SRC_LIBFT = libft/libft.a
 MAKE_LIBFT = make -C libft
@@ -28,7 +28,7 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 
-SRC_FILES = pipex child_process parent_process ft_split_w_quotes
+SRC_FILES = pipex pipex_utils ft_split_w_quotes
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

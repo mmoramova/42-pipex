@@ -6,15 +6,11 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:51:15 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/05/03 21:53:36 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/14 21:51:21 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include "libft/libft.h"
+#include "pipex.h"
 
 int	ft_wordcount_w_quotes(char const *s, char c)
 {
@@ -179,7 +175,6 @@ char	**ft_split_w_quotes(char *s, char c)
 				ft_free_w_quotes(p, j);
 				return (NULL);
 			}
-
 			j++;
 			i += (ft_wordlen_w_quotes(&s[i], c) - 1);
 			start = i+1;
@@ -189,13 +184,14 @@ char	**ft_split_w_quotes(char *s, char c)
 		i++;
 	}
 	p[j] = NULL;
+
 	return (p);
 }
 
 /*
 int main(void)
 {
-	char *s  = "awk \"{count++} END {printf \\\"count:%i\\\" , count}\"";
+	char *s  = "awk \"{count++} END {printf \\\"count:%ix\\\" , count}\"";
 
 	 char **t;
 	 t = ft_split_w_quotes(s, ' ');
@@ -207,6 +203,7 @@ int main(void)
 		printf("%s\n", t[i]);
 		i++;
 	}
+	printf("%s\n", t[2]);
 	//gcc ft_split_w_quotes.c libft/libft.a && ./a.out
 }
 */
