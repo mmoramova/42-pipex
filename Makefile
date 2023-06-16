@@ -6,7 +6,7 @@
 #    By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/12 13:12:49 by mmoramov          #+#    #+#              #
-#    Updated: 2023/06/14 21:41:04 by mmoramov         ###   ########.fr        #
+#    Updated: 2023/06/16 20:08:35 by mmoramov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 
-SRC_FILES = pipex pipex_utils ft_split_w_quotes
+SRC_FILES = pipex pipex_utils ft_split_w_quotes ft_wordlen
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

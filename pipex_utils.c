@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 20:46:07 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/06/14 21:56:27 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/16 20:43:23 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ void	ft_exit(int exitnumber)
 	exit(exitnumber);
 }
 
+void	ft_exits(int exitnumber, char *txt, char *txt2)
+{
+	//system("leaks pipex");
+	ft_putstr_fd("pipex: ", 2);
+	ft_putstr_fd(txt, 2);
+	if (ft_strlen(txt2) > 0)
+		ft_putstr_fd(txt2, 2);
+	exit(exitnumber);
+}
+
 char	**ft_get_paths(char **env)
 {
 	int		i;
@@ -41,7 +51,7 @@ char	**ft_get_paths(char **env)
 	return (paths);
 }
 
-int	ft_execve(char *path, char **command, char **env)
+void ft_execve(char *path, char **command, char **env)
 {
 	if (access(path, F_OK) == 0)
 	{
@@ -49,30 +59,23 @@ int	ft_execve(char *path, char **command, char **env)
 			ft_exit(126);
 		if (execve(path, command, env) == -1)
 		{
-			ft_exit(23);
+			ft_exit(1);
 		}
 	}
-	return (0);
 }
 
 void	ft_execve_prepare(char *argv, char **env)
 {
 	char	**command;
 	int		i;
-	int 	j;
+	int		j;
 	char	**paths;
 
 	j = 0;
 	i = 0;
-
 	if (argv[0] == '.' && argv[1] == '/' && ft_strchr(argv, 32))
 		exit(1);
-	command = ft_split_w_quotes(argv, ' ');
-
-	//TODO
-	if (ft_strnstr(command[0], "awk", 3))
-		command[2] = NULL;
-
+	command = ft_split_w_quotes(argv, ' ', 0);
 	while (command[j])
 	{
 		if (command[j][0] == '\'')
@@ -81,17 +84,11 @@ void	ft_execve_prepare(char *argv, char **env)
 			command[j] = ft_strtrim(command[j], "\"");
 		j++;
 	}
-
 	if (ft_strchr(command[0], '/'))
 		ft_execve(command[0], command, env);
-
 	paths = ft_get_paths(env);
-
 	while (paths[i])
 		ft_execve(ft_strjoin(ft_strjoin(paths[i++], "/"),
 				command[0]), command, env);
-	ft_putstr_fd("pipex: ", 2);
-	ft_putstr_fd(command[0], 2);
- 	ft_putstr_fd(": command not found\n", 2);
-	exit(127);
+	ft_exits(127, command[0], ": command not found\n");
 }

@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:51:15 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/06/14 21:51:21 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/16 20:15:29 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,24 @@ int	ft_wordcount_w_quotes(char const *s, char c)
 	return (nbr);
 }
 
-char ft_set_quote(char actQuote)
+char	ft_set_quote(char act_quote, int nestednbr)
 {
 	char	singlequote;
 	char	doublequote;
-	char	newQuote;
+	char	new_quote;
 
+	if (nestednbr == 0)
+		return ('\0');
 	singlequote = '\'';
 	doublequote = '\"';
-	if (actQuote == singlequote)
-		newQuote = doublequote;
+	if (act_quote == singlequote)
+		new_quote = doublequote;
 	else
-		newQuote = singlequote;
-	return(newQuote);
+		new_quote = singlequote;
+	return (new_quote);
 }
 
-char *ft_substr_wo_escapedchar(char const *s, unsigned int start, size_t len)
+char	*ft_substr_woechar(char const *s, unsigned int start, size_t len)
 {
 	unsigned int	len_s;
 	unsigned int	i;
@@ -76,115 +78,40 @@ char *ft_substr_wo_escapedchar(char const *s, unsigned int start, size_t len)
 	return (p);
 }
 
-int	ft_wordlen_w_quotes(char const *s, char c)
-{
-	int		i;
-	char	actQuote;
-	int		nestednbr;
-
-	actQuote = '\0';
-	nestednbr = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == c && actQuote == '\0')
-			return(i);
-		if (ft_strchr("\'\"", s[i]))
-		{
-			if(actQuote != '\0' && s[i] == actQuote)
-			{
-				nestednbr -=1;
-				if (nestednbr == 0)
-					actQuote = '\0';
-				else
-					actQuote = ft_set_quote(actQuote);
-			}
-			else
-			{
-				actQuote = s[i];
-				nestednbr +=1;
-			}
-		}
-		i++;
-	}
-	return (i);
-}
-
-int	ft_wordlen_w_quotes_wo_escapedchar(char const *s, char c)
-{
-	int		i;
-	char	actQuote;
-	int		nestednbr;
-
-	actQuote = '\0';
-	nestednbr = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == c && actQuote == '\0')
-			return(i);
-		if (ft_strchr("\'\"", s[i]) && (s[i-1] != '\\'))
-		{
-			if(actQuote != '\0' && s[i] == actQuote)
-			{
-				nestednbr -=1;
-				if (nestednbr == 0)
-					actQuote = '\0';
-				else
-					actQuote = ft_set_quote(actQuote);
-			}
-			else
-			{
-				actQuote = s[i];
-				nestednbr +=1;
-			}
-		}
-		i++;
-	}
-	return (i);
-}
-
-void	ft_free_w_quotes(char **s, int len)
+char	**ft_free_w_quotes(char **s, int len)
 {
 	while (len--)
 		free(s[len]);
 	free(s);
+	return (NULL);
 }
 
-char	**ft_split_w_quotes(char *s, char c)
+char	**ft_split_w_quotes(char *s, char c, int start)
 {
 	int		i;
 	int		j;
 	char	**p;
-	int		start;
 
-	i = 0;
-	j = 0;
-	start = 0;
-
-	p = malloc(sizeof(char *) * (500 + 1));
+	(0 || (i = 0) || (j = 0));
+	p = malloc(sizeof(char *) * (100 + 1));
 	if (!p)
 		return (NULL);
 	while (s[i])
 	{
 		if (s[i] != c)
 		{
-			p[j] = ft_substr_wo_escapedchar(s, start, ft_wordlen_w_quotes_wo_escapedchar(&s[i], c));
+			p[j] = ft_substr_woechar(s, start, ft_wordlen_wq_woechar(&s[i], c));
 			if (!p[j])
-			{
-				ft_free_w_quotes(p, j);
-				return (NULL);
-			}
+				return (ft_free_w_quotes(p, j));
 			j++;
 			i += (ft_wordlen_w_quotes(&s[i], c) - 1);
-			start = i+1;
+			start = i + 1;
 		}
 		else if (s[i] == c)
 			start++;
 		i++;
 	}
 	p[j] = NULL;
-
 	return (p);
 }
 
