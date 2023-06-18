@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 20:46:07 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/06/16 20:43:23 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:11:44 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,12 @@ void	ft_exits(int exitnumber, char *txt, char *txt2)
 	//system("leaks pipex");
 	ft_putstr_fd("pipex: ", 2);
 	ft_putstr_fd(txt, 2);
-	if (ft_strlen(txt2) > 0)
+	if (txt2 && ft_strlen(txt2) > 0)
+	{
+		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(txt2, 2);
+	}
+	ft_putstr_fd("\n", 2);
 	exit(exitnumber);
 }
 
@@ -56,10 +60,10 @@ void ft_execve(char *path, char **command, char **env)
 	if (access(path, F_OK) == 0)
 	{
 		if (access(path, X_OK) != 0)
-			ft_exit(126);
+			ft_exits(126, strerror(errno), NULL);
 		if (execve(path, command, env) == -1)
 		{
-			ft_exit(1);
+			ft_exits(errno, strerror(errno), NULL);
 		}
 	}
 }
@@ -90,5 +94,5 @@ void	ft_execve_prepare(char *argv, char **env)
 	while (paths[i])
 		ft_execve(ft_strjoin(ft_strjoin(paths[i++], "/"),
 				command[0]), command, env);
-	ft_exits(127, command[0], ": command not found\n");
+	ft_exits(127, command[0], "command not found");
 }

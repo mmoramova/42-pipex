@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 11:17:53 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/06/16 20:44:57 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:07:59 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_child_process(char **argv, char **env, int *fd)
 
 	file = open(argv[1], O_RDONLY, 0666);
 	if (file == -1)
-		ft_exits(errno, "input: ", "No such file or directory\n");
+		ft_exits(errno, argv[1], strerror(errno));
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(file, STDIN_FILENO);
 	ft_close(fd, file);
@@ -46,12 +46,13 @@ int	main(int argc, char **argv, char *env[])
 	int	pid;
 
 	if (argc != 5)
-		ft_exit(1); //error
+		ft_exits(1, "Please input 5 arguments", NULL);
+		//ft_exit(1); //error
 	if (pipe(fd) == -1)
-		ft_exit(errno);
+		ft_exits(errno, strerror(errno), NULL);
 	pid = fork();
 	if (pid == -1)
-		ft_exit(errno);
+		ft_exits(errno, strerror(errno), NULL);
 	if (pid == 0)
 		ft_child_process(argv, env, fd);
 	else
