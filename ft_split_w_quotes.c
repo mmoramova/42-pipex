@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:51:15 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/06/16 20:15:29 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:01:23 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,6 @@ int	ft_wordcount_w_quotes(char const *s, char c)
 		s++;
 	}
 	return (nbr);
-}
-
-char	ft_set_quote(char act_quote, int nestednbr)
-{
-	char	singlequote;
-	char	doublequote;
-	char	new_quote;
-
-	if (nestednbr == 0)
-		return ('\0');
-	singlequote = '\'';
-	doublequote = '\"';
-	if (act_quote == singlequote)
-		new_quote = doublequote;
-	else
-		new_quote = singlequote;
-	return (new_quote);
 }
 
 char	*ft_substr_woechar(char const *s, unsigned int start, size_t len)

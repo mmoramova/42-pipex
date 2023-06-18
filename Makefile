@@ -6,13 +6,13 @@
 #    By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/12 13:12:49 by mmoramov          #+#    #+#              #
-#    Updated: 2023/06/16 20:08:35 by mmoramov         ###   ########.fr        #
+#    Updated: 2023/06/18 17:57:17 by mmoramov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 HEADER = pipex.h
-C_FLAGS = -Wall -Wextra -Werror -MMD -g3
+C_FLAGS = -Wall -Wextra -Werror -MMD
 RM = rm -f
 SRC_LIBFT = libft/libft.a
 MAKE_LIBFT = make -C libft

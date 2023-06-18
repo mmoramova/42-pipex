@@ -6,7 +6,7 @@
 /*   By: mmoramov <mmoramov@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 11:17:53 by mmoramov          #+#    #+#             */
-/*   Updated: 2023/06/18 12:07:59 by mmoramov         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:49:37 by mmoramov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_child_process(char **argv, char **env, int *fd)
 
 	file = open(argv[1], O_RDONLY, 0666);
 	if (file == -1)
-		ft_exits(errno, argv[1], strerror(errno));
+		ft_exit(errno, argv[1], strerror(errno));
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(file, STDIN_FILENO);
 	ft_close(fd, file);
@@ -32,7 +32,7 @@ int	ft_parent_process(char **argv, char **env, int *fd)
 
 	file = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0666);
 	if (file == -1)
-		ft_exit(1);
+		ft_exit(1, argv[4], strerror(errno));
 	dup2(fd[0], STDIN_FILENO);
 	dup2(file, STDOUT_FILENO);
 	ft_close(fd, file);
@@ -46,13 +46,12 @@ int	main(int argc, char **argv, char *env[])
 	int	pid;
 
 	if (argc != 5)
-		ft_exits(1, "Please input 5 arguments", NULL);
-		//ft_exit(1); //error
+		ft_exit(1, "Please input 4 arguments", "./pipex file1 cmd1 cmd2 file2");
 	if (pipe(fd) == -1)
-		ft_exits(errno, strerror(errno), NULL);
+		ft_exit(errno, strerror(errno), NULL);
 	pid = fork();
 	if (pid == -1)
-		ft_exits(errno, strerror(errno), NULL);
+		ft_exit(errno, strerror(errno), NULL);
 	if (pid == 0)
 		ft_child_process(argv, env, fd);
 	else
